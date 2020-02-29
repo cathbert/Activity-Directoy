@@ -2,6 +2,15 @@
 """
     Author        : Cathbert Mutaurwa
     Project title : Activity Diary
+    Habits       :
+        #1. Brush teeth before bed
+        #2. Read a book *Suggestions
+        #3. Exercise (run, workout, quickie)
+        #4. Drink water (3 glasses a day)
+        #5. Eat 2 fruits and Veg
+        #6. Sleep by 2200hrs
+        #7. Wake up early
+        #8. Pray
     Duration date : 13/02/2020 -
     Description   : Program for my wife to record her activities and routine
                     exercises.
