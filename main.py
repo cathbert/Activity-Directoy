@@ -43,7 +43,7 @@ class ActivityDiary(tk.Tk):
         def time_counter(label):
             def counter():
                 self.count += 1
-                label.config(text=str(datetime.now().strftime("Today\'s date: %d.%m.%Y \nTime: %H:%M:%S  ")))
+                label.config(text=str(datetime.now().strftime("Today\'s date: %d.%m.%Y | Time: %H:%M:%S  ")))
                 label.after(1000, counter)
 
             counter()
@@ -278,10 +278,8 @@ class HomePage(tk.Frame):
         font = ("Verdana", 11)
 
         # Page title
-
-        with open("temporary_files/current_user.txt", "r") as f:
-            title = tk.Label(self, text=f"{f.read()} Home Page")
-            title.pack()
+        title = tk.Label(self, text="Welcome Nezi", bg='#ff33bb')
+        title.pack()
 
 
 if __name__ == "__main__":
