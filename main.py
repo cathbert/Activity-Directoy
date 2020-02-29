@@ -68,7 +68,7 @@ class ActivityDiary(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for i in [MainPage, PassWordPage, SignUpPage, HomePage, AdminPage]:
+        for i in [MainPage, PassWordPage, HomePage]:
             frame = i(container, self)
             self.frames[i] = frame
             frame.grid(row=0, column=0, sticky='nwes')
@@ -109,20 +109,11 @@ class MainPage(tk.Frame):
         def login():
             controller.showframe(PassWordPage)
 
-        def sign_up():
-            controller.showframe(SignUpPage)
-
         def on_enter1(event):
             login_button['background'] = '#ff73bb'
 
         def on_leave1(event):
             login_button['background'] = '#ff33bb'
-
-        def on_enter2(event):
-            signing_button['background'] = '#ff73bb'
-
-        def on_leave2(event):
-            signing_button['background'] = '#ff33bb'
 
         def on_enter3(event):
             exit_button['background'] = '#ff73bb'
@@ -136,19 +127,12 @@ class MainPage(tk.Frame):
                                  font=font, text="Login", relief='flat', command=login)
         login_button.pack(side="left", expand=True)
 
-        signing_button = tk.Button(start_button_frame, width=15, bg='#ff33bb',
-                                   font=font, text="Sign Up", relief='flat', command=sign_up)
-        signing_button.pack(side="left", expand=True)
-
         exit_button = tk.Button(start_button_frame, width=15, bg='#ff33bb',
                                 font=font, text="Exit", relief='flat', command=exit)
         exit_button.pack(expand=True)
 
         login_button.bind("<Enter>", on_enter1)
         login_button.bind("<Leave>", on_leave1)
-
-        signing_button.bind("<Enter>", on_enter2)
-        signing_button.bind("<Leave>", on_leave2)
 
         exit_button.bind("<Enter>", on_enter3)
         exit_button.bind("<Leave>", on_leave3)
@@ -174,9 +158,7 @@ class PassWordPage(tk.Frame):
         # Inserting Start button
         def input_pwd():
 
-            self.count
             if pwd_entry.get() == "1198":
-                controller.showframe(AdminPage)
                 pwd_entry.delete(0, "end")
             elif db.login_user(pwd_entry.get()):
                 controller.showframe(HomePage)
@@ -205,6 +187,7 @@ class PassWordPage(tk.Frame):
         pwd_button.pack()
 
 
+'''
 class SignUpPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -288,6 +271,7 @@ class SignUpPage(tk.Frame):
 
         register_button.bind("<Enter>", on_enter)
         register_button.bind("<Leave>", on_leave)
+'''
 
 
 class HomePage(tk.Frame):
@@ -302,109 +286,6 @@ class HomePage(tk.Frame):
         with open("temporary_files/current_user.txt", "r") as f:
             title = tk.Label(self, text=f"{f.read()} Home Page")
             title.pack()
-
-
-class AdminPage(tk.Frame):
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-
-        self.config(bg='#ff33bb')
-        font = ("Verdana", 11)
-
-        # Page title
-        title = tk.Label(self, text="Admin Home Page", bg='#513d77', fg="Turquoise", font=("Verdana", 14))
-        title.pack()
-
-        # This is the umbrella frame for panel and tree frames
-        overall_frame = tk.Frame(self)
-        overall_frame.pack(fill='x')
-
-        # This is to hold the panel buttons
-        panel_frame = tk.Frame(overall_frame, bg='#513d77')
-        panel_frame.pack(expand=True, fill="x")
-
-        # This is to hold the whole database view
-        tree_frame = tk.Frame(overall_frame)
-        tree_frame.pack(anchor="n", side='top', expand=True, fill="x")
-
-        # add new user panel button
-        add_new_user = tk.Button(panel_frame, text="Add New User", fg="turquoise", bg='#513d77',
-                                 relief="groove", font=font)
-        add_new_user.pack(side='left')
-
-        def delete_row():
-            selected_row = tdv1.selection()
-            text = tdv1.item(selected_row, 'values')
-            try:
-                db.delete_user(text[0])
-                messagebox.showinfo("Successs!", "User deleted from database")
-            except:
-                pass
-            tdv1.delete(selected_row)
-
-        # Delete user panel button
-        delete_user = tk.Button(panel_frame, text="Delete User", fg="turquoise", bg='#513d77',
-                                relief="groove", font=font, command=delete_row)
-        delete_user.pack(side='left')
-
-        # logout panel button
-        logout_btn = tk.Button(panel_frame, text="Logout", fg="gold", bg='#513d77',
-                               relief="groove", font=font, command=lambda: controller.showframe(MainPage))
-        logout_btn.pack(side='left')
-
-        def callback(event):
-            rowid = tdv1.identify_row(event.y)
-            column = tdv1.identify_column(event.x)
-            selitems = tdv1.selection()
-            if selitems:
-                selitem = selitems[0]
-                text = tdv1.item(selitem, 'values')
-                cell = int(column[1]) - 1
-                print('Click on row:', rowid[0])
-                print('Row data:', text)
-                print('Clicked on Cell:', cell)
-                print('Cell data:', text[cell])
-
-        def get_row_data():
-            selected_row = tdv1.selection()
-            prev_item = tdv1.prev(selected_row)
-            text = tdv1.item(selected_row, 'values')
-            tags = tdv1.item(prev_item, 'tags')
-            if tags:
-                print(tags[0])
-            else:
-                pass
-            print(text)
-
-        menu = tk.Menu(tree_frame, tearoff=0)
-        menu.add_command(label='Print row', command=get_row_data)
-        menu.add_command(label='Add', command=None)
-        menu.add_command(label='Edit', command=None)
-        menu.add_command(label='Delete', command=delete_row)
-
-        def mymenu(event):
-            row_id = tdv1.identify_row(event.y)
-            tdv1.selection_set(row_id)
-            menu.post(event.x_root, event.y_root)
-
-        tree_columns = ['Name', 'Surname', 'Username', 'Password']
-        tdv1 = TreeDataView(tree_frame, tree_columns, scrollbar_x=True, scrollbar_y=True, double_click=callback)
-        tdv1.pack(fill='both', expand=1)
-
-        # Lets pick a random name, email and company name from the lists then create the email address.
-
-        for item in db.get_all_users():
-            name = item[0]
-            surname = item[1]
-            username = item[2]
-            password = item[3]
-
-            # Now lets insert a row with random data into the table.
-            new_item = tdv1.insert('', 'end', values=(name, surname, username, password))
-            tdv1.table_set_striped(new_item)
-
-        # --configuring background color--
-        self.configure(bg='#513d77')
 
 
 if __name__ == "__main__":
