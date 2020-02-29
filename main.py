@@ -25,7 +25,6 @@ import time
 
 # Initializing support modules from resources_and_tools library
 db = Database()
-db.get_all_users()
 log = LoggerEngine()
 
 
@@ -44,7 +43,7 @@ class ActivityDiary(tk.Tk):
         def time_counter(label):
             def counter():
                 self.count += 1
-                label.config(text=str(datetime.now().strftime("Today\'s date: %d-%m-%Y \nTime: %H:%M:%S  ")))
+                label.config(text=str(datetime.now().strftime("Today\'s date: %d.%m.%Y \nTime: %H:%M:%S  ")))
                 label.after(1000, counter)
 
             counter()
@@ -157,10 +156,7 @@ class PassWordPage(tk.Frame):
 
         # Inserting Start button
         def input_pwd():
-
-            if pwd_entry.get() == "1198":
-                pwd_entry.delete(0, "end")
-            elif db.login_user(pwd_entry.get()):
+            if db.login_user(pwd_entry.get()):
                 controller.showframe(HomePage)
                 pwd_entry.delete(0, "end")
             elif pwd_entry.get() == '':

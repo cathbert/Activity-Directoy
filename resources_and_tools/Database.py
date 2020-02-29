@@ -23,12 +23,12 @@ class Database:
                 log.log_warning(f"Database not found!")
                 self.conn = sqlite3.connect("database files/actidia.db")
                 self.cur = self.conn.cursor()
-                self.cur.execute("CREATE TABLE IF NOT EXISTS users(fname TEXT ,"
+                self.cur.execute("CREATE TABLE IF NOT EXISTS user(fname TEXT ,"
                                  "lname TEXT, username TEXT, password TEXT)")
                 self.cur.execute("CREATE TABLE IF NOT EXISTS activities(title TEXT ,"
                                  "time BLOB)")
-                self.cur.execute("INSERT INTO users(fname, lname, username, password)"
-                                 " VALUES(?,?,?,?)", ("Cathbert", 'Mutaurwa', "cartis", 1198))
+                self.cur.execute("INSERT INTO user(fname, lname, username, password)"
+                                 " VALUES(?,?,?,?)", ("Neziswa", 'Mutaurwa', "Nezi", "DenzeL"))
                 self.conn.commit()
                 log.log_info(f"Database and tables created successfully!")
         else:
@@ -37,7 +37,7 @@ class Database:
 
     def login_user(self, password):
         try:
-            users = self.cur.execute("SELECT * FROM users WHERE password=?", (password,))
+            users = self.cur.execute("SELECT * FROM user WHERE password=?", (password,))
 
             for user in users.fetchall():
                 if user[-1] == password:
