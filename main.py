@@ -173,12 +173,12 @@ class PassWordPage(tk.Frame):
                 if self.count == 3:
                     messagebox.showwarning("Are you dumb", "If you dont know or forget password"
                                                            " consult system admin")
-                    self.count = 1
+                    self.count = 0
                 self.count += 1
             else:
                 pwd_label.config(text="Wrong password!!")
                 pwd_entry.delete(0, "end")
-                self.count = 1
+                self.count = 0
 
         start_button_frame = tk.Frame(self, bg='#ff33bb')
         start_button_frame.pack(side="top", expand=True, anchor="n")
@@ -190,6 +190,26 @@ class PassWordPage(tk.Frame):
         pwd_button = tk.Button(start_button_frame, width=30, bg='#ff33bb',
                                font=font, text="Start", relief='flat', command=input_pwd)
         pwd_button.pack()
+
+        def enter_key(event):
+            # Setting up the ENTER key
+            if db.login_user(pwd_entry.get()):
+                controller.showframe(HomePage)
+                pwd_entry.delete(0, "end")
+            elif pwd_entry.get() == '':
+                pwd_label.config(text="Entry empty!!!")
+                if self.count == 3:
+                    messagebox.showwarning("Are you dumb", "If you dont know or forget password"
+                                                           " consult system admin")
+                    self.count = 0
+                    pwd_label.config(text="")
+                self.count += 1
+            else:
+                pwd_label.config(text="Wrong password!!")
+                pwd_entry.delete(0, "end")
+                self.count = 1
+
+        pwd_entry.bind("<Return>", enter_key)
 
 
 '''
