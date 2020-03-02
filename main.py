@@ -46,29 +46,10 @@ class ActivityDiary(tk.Tk):
         call(["attrib", "+H", "database files"])
         # self.iconbitmap("images/cch_logo.ico")
 
-        self.count = 0
-
-        # time-----------------
-        def time_counter(label):
-            def counter():
-                self.count += 1
-                label.config(text=str(datetime.now().strftime("Today\'s date: %d.%m.%Y | Time: %H:%M:%S  ")))
-                label.after(1000, counter)
-
-            counter()
-
-        time_label = tk.Label(self, bg='#ff33bb', font=("Verdana", 12))
-        time_label.pack()
-        time_counter(time_label)
-
-        def on_enter(event):
-            time_label["foreground"] = "purple"
-
-        def on_leave(event):
-            time_label["foreground"] = "black"
-
-        time_label.bind("<Enter>", on_enter)
-        time_label.bind("<Leave>", on_leave)
+        space1 = tk.Label(self, bg='#ff33bb')
+        space1.pack()
+        space2 = tk.Label(self, bg='#ff33bb')
+        space2.pack()
 
         container = tk.Frame(self)
         container.pack(side='top', fill='both', expand=True)
@@ -306,19 +287,48 @@ class HomePage(tk.Frame):
         self.config(bg='#ff33bb')
         font = ("Verdana", 11)
 
+        # time-----------------
+        self.count = 0
+
+        def time_counter(label):
+            def counter():
+                self.count += 1
+                label.config(text=str(datetime.now().strftime("Today\'s date: %d.%m.%Y | Time: %H:%M:%S  ")))
+                label.after(1000, counter)
+
+            counter()
+
+        time_label = tk.Label(self, bg='#ff33bb', font=("Verdana", 12))
+        time_label.pack()
+        time_counter(time_label)
+
+        def on_enter(event):
+            time_label["foreground"] = "purple"
+
+        def on_leave(event):
+            time_label["foreground"] = "black"
+
+        time_label.bind("<Enter>", on_enter)
+        time_label.bind("<Leave>", on_leave)
+
         # Page title
-        title = tk.Label(self, text="Welcome Nezi", bg='#ff33bb')
+        morning = ['00', '01', '02', '03', '04', '05', '06', '06', '08', '09',
+                   '10', '11']
+        day = ['12', '13', '14', '15', '16', '17', '18']
+        evening = ['19', '20', '21', '22', '23']
+
+        title = tk.Label(self, text="Welcome Nezi", fg="turquoise", bg='#ff33bb', font=("Calibri", 26))
         title.pack()
+
+        if datetime.now().strftime("%H:%M:%S ").split(":")[0] in morning:
+            title.config(text="Good morning Nezi")
+        if datetime.now().strftime("%H:%M:%S ").split(":")[0] in day:
+            title.config(text="Good day Nezi")
+        if datetime.now().strftime("%H:%M:%S ").split(":")[0] in evening:
+            title.config(text="Good evening Nezi")
 
 
 if __name__ == "__main__":
     app = ActivityDiary()
     app.mainloop()
-
-    with open("temporary_files/current_user.txt", 'r') as f:
-        if len(f.read()) > 0:
-            log.log_user_logout(f"{f.read()} exited out")
-        else:
-            log.log_user_logout(f"Admin exited out")
-
-    db.clear_temporary()
+    log.log_info("Neziswa Mutaurwa logged out!")

@@ -28,7 +28,7 @@ class Database:
                 self.cur.execute("CREATE TABLE IF NOT EXISTS activities(title TEXT ,"
                                  "time BLOB)")
                 self.cur.execute("INSERT INTO user(fname, lname, username, password)"
-                                 " VALUES(?,?,?,?)", ("Neziswa", 'Mutaurwa', "Nezi", "DenzeL"))
+                                 " VALUES(?,?,?,?)", ("Neziswa", 'Mutaurwa', "Nezi", "1"))
                 self.conn.commit()
                 log.log_info(f"Database and tables created successfully!")
         else:
